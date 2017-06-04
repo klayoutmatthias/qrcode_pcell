@@ -5,7 +5,7 @@
  <api-version/>
  <title>PCell library</title>
  <doc>This package provides a QR code pcell for KLayout.</doc>
- <doc-url>readme.html</doc-url>
+ <doc-url>..</doc-url>
  <url/>
  <license>MIT</license>
  <author>Matthias Köfferlein</author>
