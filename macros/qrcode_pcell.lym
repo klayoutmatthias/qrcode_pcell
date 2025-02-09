@@ -905,7 +905,7 @@ module QRCodeLibModule
           if p.size == 1
             bs.add(p[0], 6)
           else
-            bs.add(p[1] * 45 + p[0], 11)
+            bs.add(p[0] * 45 + p[1], 11)
           end
         end
   
