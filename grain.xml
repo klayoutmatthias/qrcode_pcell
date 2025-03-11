@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <salt-grain>
  <name>qrcode_pcell</name>
- <version>1.1</version>
+ <version>1.2</version>
  <api-version/>
  <title>PCell library</title>
  <doc>This package provides a QR code pcell for KLayout.</doc>
