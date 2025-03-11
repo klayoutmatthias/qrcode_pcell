@@ -7,7 +7,7 @@
  <doc>This package provides a QR code pcell for KLayout.</doc>
  <doc-url>../..</doc-url>
  <url/>
- <license>MIT</license>
+ <license>GPL v3</license>
  <author>Matthias Köfferlein</author>
  <author-contact>matthias@klayout.de</author-contact>
  <authored-time/>
