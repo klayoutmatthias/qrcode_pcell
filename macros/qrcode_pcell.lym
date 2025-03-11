@@ -8,6 +8,7 @@
  <doc/>
  <autorun>true</autorun>
  <autorun-early>false</autorun-early>
+ <priority>0</priority>
  <shortcut/>
  <show-in-menu>false</show-in-menu>
  <group-name/>
@@ -809,7 +810,7 @@ module QRCodeLibModule
           end
         end
       end
-  
+      
     end
   
     # Encodes the text for the given format. 
@@ -908,13 +909,16 @@ module QRCodeLibModule
             bs.add(p[0] * 45 + p[1], 11)
           end
         end
-  
+        
+        # add a terminator
+        # (empirically, alphanumeric mode needs a terminator)
+        bs.add(0, 4)
+    
       else
         raise("Invalid format #{format}")
       end
   
       data = bs.data
-  
   
       # split into blocks and generate ECC data
   
@@ -1123,7 +1127,7 @@ module QRCodeLibModule
       7.times do |i|
         bit = ((fc &amp; 1) != 0)
         @field_data[n - 7 + i][8] = bit
-        @field_data[8][(i &gt;= 2 ? 6 : 7) - i] = bit
+        @field_data[8][(i &gt;= 1 ? 6 : 7) - i] = bit
         fc &gt;&gt;= 1
       end
   
