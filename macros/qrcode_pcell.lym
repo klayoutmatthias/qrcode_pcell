@@ -36,6 +36,11 @@
 # For numeric and alphanumeric encoding it is necessary to have only
 # digits or the characters allowed for alphanumeric encoding in the text.
 #
+# For QR code encoding details see:
+# 
+#   https://www.thonky.com/qr-code-tutorial/data-encoding
+#   https://en.wikipedia.org/wiki/QR_code
+#   https://people.sc.fsu.edu/~jburkardt/classes/tta_2015/qr_code.pdf
 
 module QRCodeLibModule
 
@@ -165,6 +170,10 @@ module QRCodeLibModule
   
     def data
       @data
+    end
+    
+    def nbits
+      @nbits
     end
   
   end
@@ -599,7 +608,7 @@ module QRCodeLibModule
         bits1 = 4 + 8 + 8 * n
         bits2 = bits3 = 4 + 16 + 8 * n
       elsif format == :numeric
-        bits1 = 4 + 10 + (n + 2) / 3
+        bits1 = 4 + 10 + (n / 3) * 10 + [0, 4, 7][n % 3]
         bits2 = bits1 + 2
         bits3 = bits2 + 2
       elsif format == :alphanumeric
@@ -865,11 +874,11 @@ module QRCodeLibModule
           end
           parts[-1] += c
         end
-  
+        
         parts.each do |p|
-          bs.add(p.to_i, 10)
+          bs.add(p.to_i, [ 0, 4, 7, 10 ][p.size])
         end
-  
+        
       elsif format == :alphanumeric
   
         bs.add(2, 4)
@@ -910,14 +919,23 @@ module QRCodeLibModule
           end
         end
         
-        # add a terminator
-        # (empirically, alphanumeric mode needs a terminator)
-        bs.add(0, 4)
-    
       else
         raise("Invalid format #{format}")
       end
-  
+
+      # calculate the total number of bits
+      # and add a terminator of max 4 bits
+      
+      nbits = 0
+      ECC_parameters[@version - 1][@level].each do |ecc| 
+        nbits += 8 * ecc[0] * ecc[2]
+      end
+      
+      nterm = [4, nbits - bs.nbits].min
+      if nterm &gt; 0
+        bs.add(0, nterm)
+      end
+
       data = bs.data
   
       # split into blocks and generate ECC data
